@@ -13,5 +13,14 @@ app.get('/api/users/:id', (req, res) =>{
     }
     res.send(getUser);
 })
+app.post('/api/users', (req, res) =>{
+    const newUser = {
+        id: users.length+1,
+        name: req.body.name,
+        email: req.body.email
+    };
+    users.push(newUser);
+    res.send(newUser);
+})
 
 app.listen(4000, () => console.log('API iniciada'));
