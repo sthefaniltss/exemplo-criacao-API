@@ -23,4 +23,20 @@ app.post('/api/users', (req, res) =>{
     res.send(newUser);
 })
 
+app.put('/api/users/:id', (req, res) => {
+    const updateUser = users.find(user => user.id === parseInt(req.params.id));
+    if(!updateUser) {
+        return res.status(404).send('Não encontramos esse usuário :(');
+    }
+    if(!req.body.name || !req.body.email){
+        return res.status(400).send('É necessário incluir nome e email!');
+    } 
+    updateUser.name = req.body.name
+    updateUser.email = req.body.email
+    
+    res.send(updateUser);
+    res.send('Alteração feita com sucesso');
+
+})
+
 app.listen(4000, () => console.log('API iniciada'));
