@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require('joi');
 const users = require('./users.js');
 const app = express();
 
@@ -19,23 +20,35 @@ app.post('/api/users', (req, res) =>{
         name: req.body.name,
         email: req.body.email
     };
+    const schema = {
+        name: Joi.string().min(5).required(),
+        email: Joi.string().min(5).required()
+    }
+    const validation = Joi.validate(req.body, schema);
+    if(validation.error){
+        return res.status(400).send(validation.error.details[0].message);
+    } 
     users.push(newUser);
     res.send(newUser);
 })
 
 app.put('/api/users/:id', (req, res) => {
     const updateUser = users.find(user => user.id === parseInt(req.params.id));
+    const schema = {
+        name: Joi.string().min(5).required(),
+        email: Joi.string().min(5).required()
+    }
+    const validation = Joi.validate(req.body, schema);
     if(!updateUser) {
         return res.status(404).send('Não encontramos esse usuário :(');
     }
-    if(!req.body.name || !req.body.email){
-        return res.status(400).send('É necessário incluir nome e email!');
+    if(validation.error){
+        return res.status(400).send(validation.error.details[0].message);
     } 
-    updateUser.name = req.body.name
-    updateUser.email = req.body.email
+    updateUser.name = req.body.name;
+    updateUser.email = req.body.email;
     
     res.send(updateUser);
-    res.send('Alteração feita com sucesso');
 
 })
 
