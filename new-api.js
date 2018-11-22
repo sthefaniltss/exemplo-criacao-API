@@ -15,8 +15,9 @@ app.get('/api/users/:id', (req, res) =>{
     res.send(getUser);
 })
 app.post('/api/users', (req, res) =>{
+    const id = Math.max(...users.map(user => user.id)) + 1;
     const newUser = {
-        id: users.length+1,
+        id,
         name: req.body.name,
         email: req.body.email
     };
