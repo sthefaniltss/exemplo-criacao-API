@@ -49,7 +49,16 @@ app.put('/api/users/:id', (req, res) => {
     updateUser.email = req.body.email;
     
     res.send(updateUser);
-
+    
 })
 
+app.delete('/api/users/:id', (req, res) => {
+    const deleteUser = users.find(user => user.id === parseInt(req.params.id));
+    const index = users.indexOf(deleteUser);
+    if(index > -1){
+        users.splice(index, 1);
+        res.send(deleteUser);
+    }
+    
+})
 app.listen(4000, () => console.log('API iniciada'));
